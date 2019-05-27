@@ -33,6 +33,15 @@ sort(LoR1_freq, decreasing = TRUE)[1:20]
 LoR1_freq <- table(LoR1_ud$lemma[LoR1_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
 sort(LoR1_freq, decreasing = TRUE)[1:20]
 
+
+####NEW: correction of mistakes
+LoR1_ud$lemma[LoR1_ud$lemma == "...nor"] <- "nor"
+LoR1_ud$lemma[LoR1_ud$lemma == "...perfect"] <- "perfect"
+LoR1_freq <- table(LoR1_ud$lemma[LoR1_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
+sort(LoR1_freq, decreasing = TRUE)[1:20]
+
+
+
 #Step 4. Repeat the same for the rest of the files.
 LoR2 <- read_file("LoR2.txt")
 LoR2 <- gsub("<i>", "", LoR2)
@@ -40,6 +49,12 @@ LoR2 <- gsub("</i>", "", LoR2)
 LoR2 <- gsub("\\b[0-9:,]+\\b", "", LoR2)
 LoR2 <- gsub("-->", "", LoR2)
 LoR2_ud <- udpipe(LoR2, eng_ud)
+LoR2_freq <- table(LoR2_ud$lemma[LoR2_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
+sort(LoR2_freq, decreasing = TRUE)[1:20]
+
+###NEW: correction of parsing mistakes
+LoR2_ud$lemma[LoR2_ud$lemma == "...thousand"] <- "thousand"
+LoR2_ud$lemma[LoR2_ud$lemma == "...until"] <- "until"
 LoR2_freq <- table(LoR2_ud$lemma[LoR2_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
 sort(LoR2_freq, decreasing = TRUE)[1:20]
 
@@ -52,6 +67,13 @@ LoR3_ud <- udpipe(LoR3, eng_ud)
 LoR3_freq <- table(LoR3_ud$lemma[LoR3_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
 sort(LoR3_freq, decreasing = TRUE)[1:20]
 
+###NEW: correction of parsing mistakes
+LoR3_ud$lemma[LoR3_ud$lemma == "...from"] <- "from"
+LoR3_ud$lemma[LoR3_ud$lemma == "...once"] <- "once"
+LoR3_ud$lemma[LoR3_ud$lemma == "...traitor"] <- "traitor"
+LoR3_freq <- table(LoR3_ud$lemma[LoR3_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
+sort(LoR3_freq, decreasing = TRUE)[1:20]
+
 Hobbit1 <- read_file("Hobbit1.txt")
 Hobbit1 <- gsub("<i>", "", Hobbit1)
 Hobbit1 <- gsub("</i>", "", Hobbit1)
@@ -61,12 +83,30 @@ Hobbit1_ud <- udpipe(Hobbit1, eng_ud)
 Hobbit1_freq <- table(Hobbit1_ud$lemma[Hobbit1_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
 sort(Hobbit1_freq, decreasing = TRUE)[1:20]
 
+###NEW: correction of parsing mistakes (see Hobbit1_df)
+Hobbit1_ud$lemma[Hobbit1_ud$lemma == "...drop"] <- "drop"
+Hobbit1_ud$lemma[Hobbit1_ud$lemma == "...nor"] <- "nor"
+Hobbit1_ud$lemma[Hobbit1_ud$lemma == "abandoned"] <- "abandon"
+
+Hobbit1_freq <- table(Hobbit1_ud$lemma[Hobbit1_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
+sort(Hobbit1_freq, decreasing = TRUE)[1:20]
+
+
+
 Hobbit2 <- read_file("Hobbit2.txt")
 Hobbit2 <- gsub("<i>", "", Hobbit2)
 Hobbit2 <- gsub("</i>", "", Hobbit2)
 Hobbit2 <- gsub("\\b[0-9:,]+\\b", "", Hobbit2)
 Hobbit2 <- gsub("-->", "", Hobbit2)
 Hobbit2_ud <- udpipe(Hobbit2, eng_ud)
+Hobbit2_freq <- table(Hobbit2_ud$lemma[Hobbit2_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
+sort(Hobbit2_freq, decreasing = TRUE)[1:20]
+
+####added: correction of mistakes
+#to see the mistake:
+Hobbit2_ud[Hobbit2_ud$lemma == "Dwarve", 8:14]
+#to correct the mistake:
+Hobbit2_ud$lemma[Hobbit2_ud$lemma == "Dwarve"] <- "dwarf"
 Hobbit2_freq <- table(Hobbit2_ud$lemma[Hobbit2_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
 sort(Hobbit2_freq, decreasing = TRUE)[1:20]
 
@@ -78,6 +118,14 @@ Hobbit3 <- gsub("-->", "", Hobbit3)
 Hobbit3_ud <- udpipe(Hobbit3, eng_ud)
 Hobbit3_freq <- table(Hobbit3_ud$lemma[Hobbit3_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
 sort(Hobbit3_freq, decreasing = TRUE)[1:20]
+
+####NEW: correction of mistakes
+Hobbit3_ud$lemma[Hobbit3_ud$lemma == "...our"] <- "our"
+Hobbit3_ud$lemma[Hobbit3_ud$lemma == "...suffer"] <- "suffer"
+Hobbit3_ud$lemma[Hobbit3_ud$lemma == "...upon"] <- "upon"
+Hobbit3_freq <- table(Hobbit3_ud$lemma[Hobbit3_ud$upos %in% c("NOUN", "PROPN", "ADJ", "ADV", "VERB")])
+sort(Hobbit3_freq, decreasing = TRUE)[1:20]
+
 
 #Step 5. Turn the frequency vectors into dataframes and merge them together.
 Hobbit1_df <- data.frame(Word = names(Hobbit1_freq), Hobbit1 = as.numeric(Hobbit1_freq))
@@ -121,6 +169,52 @@ plot(Tolkien_clust)
 
 Tolkien_clust <- hclust(Tolkien_dist, method = "complete")
 plot(Tolkien_clust)
+
+###NEW: interpretation of the clusters!
+#Question 1: which words occur in LoR and don't occur in The Hobbit?
+#Let's make Word rownames and remove the first column:
+rownames(Tolkien) <- Tolkien$Word 
+Tolkien <- Tolkien[, -1]
+
+#First, we compute the probabilities of every word in a particular film:
+Tolkien_prob <- prop.table(data.matrix(Tolkien), 2)
+
+#Next, we compute the average probabilities in LoR
+LoR_meanprob <- rowMeans(Tolkien_prob[, 1:3])  
+
+#The same for The Hobbit
+Hobbit_meanprob <- rowMeans(Tolkien_prob[, 4:6])  
+
+#Next, compute the log-odds (ratios):
+
+film_ratio <- log((LoR_meanprob + 0.01)/(Hobbit_meanprob + 0.01))
+
+#Negative log-odds: the ones where the words are more frequent in The Hobbit
+sort(film_ratio)[1:20]
+
+#Positive log-odds: the ones where the words are more frequent in LoR
+sort(film_ratio, decreasing = TRUE)[1:20]
+
+#Question 2: which words occur in LoR1 and don't occur in LoR2 and LoR3, and the other way round?
+
+#First, we take the probabilities in LoR1
+LoR1_meanprob <- Tolkien_prob[, 1]
+
+#Next, we compute the average probabilities in LoR2 and LoR3
+LoR23_meanprob <- rowMeans(Tolkien_prob[, 2:3])  
+
+#Next, compute the log-odds (ratios):
+LoR123_ratio <- log((LoR1_meanprob + 0.01)/(LoR23_meanprob + 0.01))
+
+#Negative log-odds: the ones where the words are more frequent in LoR2 & 3
+sort(LoR123_ratio)[1:20]
+
+#Positive log-odds: the ones where the words are more frequent in LoR1
+sort(LoR123_ratio, decreasing = TRUE)[1:20]
+
+###Exercise:
+#Find the words that are distinctive of Hobbit2 and Hobbit3 as opposed to Hobbit1
+
 
 ###Modifications of analysis
 #Modification 1. What if we take only function words instead?
@@ -187,7 +281,6 @@ cor(Tolkien[, 2:7], method = "spearman")
 Tolkien_dist <- as.dist(1 - cor(Tolkien[, 2:7], method = "spearman"))
 Tolkien_clust <- hclust(Tolkien_dist, method = "average")
 plot(Tolkien_clust)
-
 
 
 #Simple Correspondence analysis
